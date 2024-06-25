@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4f334e61-2b37-4b0f-98ab-6867339c12f3" name="Changes" comment="Lesson 7. Build a JAR file from you latest homework (lessons 6.5) using Maven">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+    <list default="true" id="4f334e61-2b37-4b0f-98ab-6867339c12f3" name="Changes" comment="Lesson 7. Build a JAR file from lesson 6 using Gradle.">
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,7 +142,7 @@
       <workItem from="1719316431630" duration="2594000" />
       <workItem from="1719319040948" duration="179000" />
       <workItem from="1719319231253" duration="818000" />
-      <workItem from="1719320061585" duration="3796000" />
+      <workItem from="1719320061585" duration="4155000" />
     </task>
     <task id="LOCAL-00001" summary="Lesson 6. First commit">
       <option name="closed" value="true" />
@@ -197,7 +192,15 @@
       <option name="project" value="LOCAL" />
       <updated>1719321610416</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Lesson 7. Build a JAR file from lesson 6 using Gradle.">
+      <option name="closed" value="true" />
+      <created>1719337891656</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1719337891656</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -207,6 +210,7 @@
     <MESSAGE value="Lesson 6. First commit" />
     <MESSAGE value="Lesson 6.5. Added functionality" />
     <MESSAGE value="Lesson 7. Build a JAR file from you latest homework (lessons 6.5) using Maven" />
-    <option name="LAST_COMMIT_MESSAGE" value="Lesson 7. Build a JAR file from you latest homework (lessons 6.5) using Maven" />
+    <MESSAGE value="Lesson 7. Build a JAR file from lesson 6 using Gradle." />
+    <option name="LAST_COMMIT_MESSAGE" value="Lesson 7. Build a JAR file from lesson 6 using Gradle." />
   </component>
 </project>
