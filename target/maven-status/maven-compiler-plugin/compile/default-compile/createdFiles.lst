@@ -1,0 +1,8 @@
+org\example\set\CustomHashSet$Entry.class
+org\example\set\CustomHashSet$CustomIterator.class
+org\example\set\CustomSetInterface.class
+org\example\Main.class
+org\example\set\CustomHashSet.class
+org\example\list\CustomArrayList$CustomIterator.class
+org\example\list\CustomArrayList.class
+org\example\list\CustomListInterface.class
