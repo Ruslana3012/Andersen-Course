@@ -1,5 +1,3 @@
-package org.example;
-
 import org.example.mode.BusTicket;
 import org.example.service.BusTicketService;
 
@@ -21,5 +19,3 @@ public class Main {
         System.out.println("We anticipate the tickets with id [1] and [4] " + tickets);
 
         BusTicketService.removeTicketById(3L);
-    }
-}
