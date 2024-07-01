@@ -1,20 +1,21 @@
-package org.example;
+import org.example.mode.BusTicket;
+import org.example.service.BusTicketService;
 
-import org.example.model.BusTicket;
-
+import java.util.Date;
 import java.util.List;
-
-import static org.example.service.FileService.readFileInList;
-import static org.example.service.ValidatorService.getTheCountOfValidTickets;
-import static org.example.service.ValidatorService.validateTickets;
-import static org.example.service.ViolationService.getMostPopularViolation;
 
 public class Main {
     public static void main(String[] args) {
-        List<BusTicket> tickets = readFileInList("src/main/resources/tickets.txt");
-        validateTickets(tickets);
-        System.out.println("TOTAL TICKETS = " + tickets.size());
-        System.out.println("VALID TICKETS = " + getTheCountOfValidTickets());
-        System.out.println("MOST POPULAR VIOLATION = " + getMostPopularViolation());
-    }
-}
+        BusTicketService.storeTicket(new BusTicket(1L, new Date(), "A", 356));
+        BusTicketService.storeTicket(new BusTicket(2L, new Date(), "B", 216));
+        BusTicketService.storeTicket(new BusTicket(3L, new Date(), "B", 3308));
+        BusTicketService.storeTicket(new BusTicket(4L, new Date(), "A", 500));
+        BusTicketService.storeTicket(new BusTicket(5L, new Date(), "C", 190));
+
+        BusTicket ticket = BusTicketService.getTicketById(2L);
+        System.out.println("We anticipate the ticket with id [2]: " + ticket);
+
+        List<BusTicket> tickets = BusTicketService.getTicketsByTypeAndPrice("A", 200, 500);
+        System.out.println("We anticipate the tickets with id [1] and [4] " + tickets);
+
+        BusTicketService.removeTicketById(3L);
