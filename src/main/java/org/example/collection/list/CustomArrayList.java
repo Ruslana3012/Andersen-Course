@@ -1,4 +1,4 @@
-package org.example.collections.list;
+package org.example.collection.list;
 
 import java.util.Arrays;
 import java.util.Iterator;
