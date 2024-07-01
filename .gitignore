@@ -1,0 +1,10 @@
+/.gitignore
+/.gradle
+/.idea
+/build
+/out
+/target
+/gradlew
+/gradlew.bat
+/Andersen.iml
+
