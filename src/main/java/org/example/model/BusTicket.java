@@ -1,6 +1,7 @@
 package org.example.model;
 
 import lombok.*;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -8,8 +9,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BusTicket {
+    private Long id;
     private String ticketClass;
-    String ticketType;
-    String startDate;
-    String price;
+    private String ticketType;
+    private Date date;
+    private int price;
+
+    public BusTicket(Long id, Date date, String ticketClass, int price) {
+    }
 }

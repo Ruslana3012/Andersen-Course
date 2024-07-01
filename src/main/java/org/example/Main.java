@@ -1,6 +1,7 @@
-import org.example.mode.BusTicket;
-import org.example.service.BusTicketService;
+package org.example;
 
+import org.example.model.BusTicket;
+import org.example.service.BusTicketService;
 import java.util.Date;
 import java.util.List;
 
@@ -19,3 +20,5 @@ public class Main {
         System.out.println("We anticipate the tickets with id [1] and [4] " + tickets);
 
         BusTicketService.removeTicketById(3L);
+    }
+}

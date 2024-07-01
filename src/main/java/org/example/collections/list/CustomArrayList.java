@@ -1,9 +1,7 @@
-package org.example.list;
-
+package org.example.collections.list;
 
 import java.util.Arrays;
 import java.util.Iterator;
-
 
 public class CustomArrayList<E> implements CustomListInterface<E> {
     private E[] elements;

@@ -1,4 +1,4 @@
-package org.example.list;
+package org.example.collections.list;
 
 public interface CustomListInterface<E> extends Iterable<E> {
     boolean add(E element);

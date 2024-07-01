@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.mode.BusTicket;
+import org.example.model.BusTicket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class BusTicketService {
      */
     public static List<BusTicket> getTicketsByTypeAndPrice(String type, int fromPrice, int toPrice) {
         return busTicketList.stream()
-                .filter(busTicket -> busTicket.getType().equals(type) && busTicket.getPrice() >= fromPrice && busTicket.getPrice() <= toPrice)
+                .filter(busTicket -> busTicket.getTicketType().equals(type) && busTicket.getPrice() >= fromPrice && busTicket.getPrice() <= toPrice)
                 .collect(Collectors.toList());
     }
 }

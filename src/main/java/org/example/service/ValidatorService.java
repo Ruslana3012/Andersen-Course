@@ -33,11 +33,11 @@ public class ValidatorService {
 
     private static boolean isValidStartDateInTicket(BusTicket busTicket) {
         LocalDate localDate = LocalDate.now();
-        if (busTicket.getStartDate() == null || busTicket.getStartDate().isEmpty()) {
-            log.error("Start date can't be null or empty: " + busTicket);
+        if (busTicket.getDate() == null) {
+            log.error("Start date can't be null: " + busTicket);
             putViolationInMap(Violation.START_DATE);
             return false;
-        } else if (localDate.isBefore(LocalDate.parse(busTicket.getStartDate()))) {
+        } else if (localDate.isBefore(LocalDate.parse((CharSequence) busTicket.getDate()))) {
             log.error("Start date can't be in the future: " + busTicket);
             putViolationInMap(Violation.START_DATE);
             return false;
@@ -46,17 +46,11 @@ public class ValidatorService {
     }
 
     private static boolean isValidPriceInTicket(BusTicket busTicket) {
-        if (busTicket.getPrice() == null || busTicket.getPrice().isEmpty()) {
-            log.error("Price can't be null or empty: " + busTicket);
+        int priceInt = busTicket.getPrice();
+        if (priceInt == 0) {
+            log.error("Price can't be 0: " + busTicket);
             putViolationInMap(Violation.PRICE);
             return false;
-        } else {
-            int priceInt = Integer.parseInt(busTicket.getPrice());
-            if (priceInt == 0) {
-                log.error("Price can't be 0: " + busTicket);
-                putViolationInMap(Violation.PRICE);
-                return false;
-            }
         }
         return true;
     }

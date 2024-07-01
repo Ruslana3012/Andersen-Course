@@ -1,4 +1,4 @@
-package org.example.set;
+package org.example.collections.set;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
