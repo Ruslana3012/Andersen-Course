@@ -17,6 +17,7 @@ import java.time.Instant;
 import java.util.Set;
 
 @Getter
+@Setter
 @ToString
 @EqualsAndHashCode(callSuper = true)
 public class Ticket extends ID implements Shareable {
@@ -87,6 +88,7 @@ public class Ticket extends ID implements Shareable {
             throw new IllegalStateException("Ticket validation failed: \n" + sb.toString());
         }
     }
+
 
     @Override
     public void share(String phone) {
