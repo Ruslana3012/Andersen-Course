@@ -1,4 +1,4 @@
-package org.example.collections.set;
+package org.example.collection.set;
 
 import java.util.Iterator;
 
