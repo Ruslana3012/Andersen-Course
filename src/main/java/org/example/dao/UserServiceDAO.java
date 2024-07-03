@@ -1,117 +1,83 @@
 package org.example.dao;
 
+import org.example.entity.TicketEntity;
 import org.example.entity.UserEntity;
+import org.example.util.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
-public class UserServiceDAO implements AutoCloseable {
-    private Connection connection;
-
-    public UserServiceDAO(Connection connection) {
-        this.connection = connection;
-    }
-
+public class UserServiceDAO {
     public void saveUser(UserEntity user) {
-        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO users (name) VALUES (?)")) {
-            statement.setString(1, user.getName());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.save(user);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            throw new RuntimeException("Error saving user.", e);
         }
     }
 
     public List<UserEntity> getAllUsers() {
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM users")) {
-            ResultSet resultSet = statement.executeQuery();
-            List<UserEntity> users = new ArrayList<>();
-            while (resultSet.next()) {
-                UserEntity user = new UserEntity();
-                user.setId(resultSet.getInt("id"));
-                user.setName(resultSet.getString("name"));
-                user.setCreationDate(resultSet.getTimestamp("creation_date"));
-                users.add(user);
-            }
-            return users;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM UserEntity", UserEntity.class).list();
         }
     }
 
     public UserEntity fetchUserById(int userId) {
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE id = ?")) {
-            statement.setInt(1, userId);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                UserEntity user = new UserEntity();
-                user.setId(resultSet.getInt("id"));
-                user.setName(resultSet.getString("name"));
-                user.setCreationDate(resultSet.getTimestamp("creation_date"));
-                return user;
-            } else {
-                return null;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(UserEntity.class, userId);
         }
     }
 
     public int getUserIdByName(String name) {
-        try (PreparedStatement statement = connection.prepareStatement("SELECT id FROM users WHERE name = ?")) {
-            statement.setString(1, name);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt("id");
-            } else {
-                throw new RuntimeException("User with name " + name + " not found");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            org.hibernate.query.Query query = session.createQuery("SELECT id FROM UserEntity WHERE name = :name");
+            query.setParameter("name", name);
+            return (int) query.uniqueResult();
         }
     }
 
     public void deleteUserByIdANdAllTheirTickets(int userId) {
-        Savepoint savepoint = null;
-        try {
-            connection.setAutoCommit(false);
-            savepoint = connection.setSavepoint();
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
 
-            TicketServiceDAO ticketServiceDAO = new TicketServiceDAO(this.connection);
-            ticketServiceDAO.deleteTicketByUserId(userId);
+            String deleteTicketsHQL = "DELETE FROM TicketEntity WHERE userId = :userId";
+            Query deleteTicketsQuery = session.createQuery(deleteTicketsHQL);
+            deleteTicketsQuery.setParameter("userId", userId);
+            deleteTicketsQuery.executeUpdate();
 
-            try (PreparedStatement statement = connection.prepareStatement("DELETE FROM users WHERE id = ?")) {
-                statement.setInt(1, userId);
-                statement.executeUpdate();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            String deleteUserHQL = "DELETE FROM UserEntity WHERE id = :userId";
+            Query deleteUserQuery = session.createQuery(deleteUserHQL);
+            deleteUserQuery.setParameter("userId", userId);
+            deleteUserQuery.executeUpdate();
 
-            connection.commit();
-        } catch (SQLException e) {
-            if (savepoint != null) {
-                try {
-                    connection.rollback(savepoint);
-                    connection.commit();
-                } catch (SQLException exception) {
-                    throw new RuntimeException("Error rolling back transaction", exception);
-                }
-            }
-            throw new RuntimeException("Error performing deletions", e);
-        } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                throw new RuntimeException("Couldn't reset auto commit", e);
-            }
+            transaction.commit();
+        } catch (RuntimeException e) {
+            if (transaction != null)
+                transaction.rollback();
+            e.printStackTrace();
         }
-
     }
 
-    @Override
-    public void close() throws SQLException {
-        if (connection != null) {
-            connection.close();
+    public void updateUserAndTickets(UserEntity user, List<TicketEntity> tickets) {
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.update(user);
+            for (TicketEntity ticket : tickets) {
+                session.update(ticket);
+            }
+            transaction.commit();
+        } catch (RuntimeException e) {
+            if (transaction != null)
+                transaction.rollback();
+            e.printStackTrace();
         }
     }
 }
