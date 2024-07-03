@@ -1,35 +1,49 @@
 package org.example;
 
+import org.example.config.FlywayConfiguration;
 import org.example.dao.TicketServiceDAO;
-import org.example.dao.UserServiceDao;
+import org.example.dao.UserServiceDAO;
 import org.example.entity.TicketEntity;
 import org.example.entity.TicketType;
 import org.example.entity.UserEntity;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Properties;
 
 public class Main {
-    public static void main(String[] args) {
-        TicketServiceDAO ticketDAO = new TicketServiceDAO();
-        UserServiceDao userDAO = new UserServiceDao();
+    public static void main(String[] args) throws SQLException, IOException {
+        Properties properties = new Properties();
+        InputStream input = Main.class.getClassLoader().getResourceAsStream("database.properties");
+        properties.load(input);
+        FlywayConfiguration.applyDbMigrations();
+        Connection connection = DriverManager.getConnection(
+                properties.getProperty("database.url"),
+                properties.getProperty("database.user"),
+                properties.getProperty("database.password"));
+        TicketServiceDAO ticketDAO = new TicketServiceDAO(connection);
+        UserServiceDAO userDAO = new UserServiceDAO(connection);
 
-        TicketEntity ticket1 = new TicketEntity(1, TicketType.DAY, new Timestamp(15667), 1);
-        TicketEntity ticket2 = new TicketEntity(2, TicketType.DAY, new Timestamp(15664), 1);
-        UserEntity user1 = new UserEntity(1, "Ruslana", new Timestamp(12334));
-        UserEntity user2 = new UserEntity(2, "Ruslana", new Timestamp(12335));
+        UserEntity user = new UserEntity("Ivanna", new Timestamp(12334));
+        userDAO.saveUser(user);
 
-        userDAO.saveUser(user1);
-        userDAO.saveUser(user2);
+        TicketEntity ticket1 = new TicketEntity(TicketType.DAY, new Timestamp(15667), 3);
+
         ticketDAO.saveTicket(ticket1);
-        ticketDAO.saveTicket(ticket2);
 
-        System.out.println(ticketDAO.fetchTicketById(1));
-        System.out.println(ticketDAO.fetchTicketByUserId(1));
-        System.out.println(userDAO.fetchUserById(2));
+        System.out.println("Get ticket by id [1]: " + ticketDAO.fetchTicketById(1));
+        System.out.println("Get tickets by user id [1]: " + ticketDAO.fetchTicketsByUserId(1));
+        System.out.println("Get user by id [2]: " + userDAO.fetchUserById(2));
 
-        System.out.println(ticketDAO.updateTicketType(1, new TicketEntity(1, TicketType.WEEK, new Timestamp(15667), 1)));
+        System.out.println("Update ticket type from [DAY] to [WEEK]: " + ticketDAO.updateTicketType(1, new TicketEntity(TicketType.WEEK, new Timestamp(15667), 1)));
 
-        userDAO.deleteUserByIdANdAllTheirTickets(1);
-        System.out.println(ticketDAO.fetchTicketByUserId(1));
+        System.out.println("Get all tickets for user [Ivanna]: " + ticketDAO.fetchTicketsByUserId(userDAO.getUserIdByName("Ivanna")));
+        userDAO.deleteUserByIdANdAllTheirTickets(userDAO.getUserIdByName("Ivanna"));
+        System.out.println("Check that user [Ivanna] was deleted: " + userDAO.getAllUsers());
+        System.out.println("Check that tickets was deleted after user deletion [Ivanna]: " + ticketDAO.fetchTicketsByUserId(3));
     }
 }
