@@ -1,10 +1,10 @@
-![image](https://github.com/Ruslana3012/Andersen-Course/assets/105870200/2ead2f9f-fd99-43f6-bf4d-04e13bfecfad)
+![image](https://github.com/Ruslana3012/Andersen-Course/assets/105870200/f9e5fd94-b6c4-4a96-9395-6e766a606ba3)
 
-Create a [BusTicketService] class with the following list of capabilities:
-1) Create a [BusTicket] for a specified date and type.
-2) Store a ticket in a in-memory storage.
-3) Remove a ticket from the storage by ID.
-4) Get ticket by ID
-5) Search tickets by type and price (from price A to price B)
-Cover the class and its function with Java docs where needed. 
-If you think that the code is “self-explainable” - don’t add docs.
+1. Add Hibernate dependencies to your project.
+2. Implement the functionality from the Homework from Lesson 8 with a help of Hibernate.
+Save Tickets and Users.
+Fetch Tickets by ID and user ID and Users by ID.
+Update Tickets type.
+Delete Users by ID and their tickets (if any).
+3. Add a functionality that allows to update both User and all his tickets in the same transaction using 
+Hibernate
