@@ -108,6 +108,40 @@ public class UserServiceDAO implements AutoCloseable {
 
     }
 
+    public void updateUserAndTicket(int userId, String newUserName, int ticketId, String newTicketType) throws SQLException {
+        Savepoint savepoint = null;
+        try {
+            connection.setAutoCommit(false);
+            savepoint = connection.setSavepoint("Savepoint1");
+
+            String sqlUpdateUser = "UPDATE users SET name = ? WHERE id = ?";
+            try (PreparedStatement statement = connection.prepareStatement(sqlUpdateUser)) {
+                statement.setString(1, newUserName);
+                statement.setInt(2, userId);
+                statement.executeUpdate();
+            }
+
+            String sqlUpdateTicket = "UPDATE tickets SET ticket_type = ?::ticket_type WHERE id = ?";
+            try (PreparedStatement statement = connection.prepareStatement(sqlUpdateTicket)) {
+                statement.setString(1, newTicketType);
+                statement.setInt(2, ticketId);
+                statement.executeUpdate();
+            }
+
+            connection.commit();
+        } catch (SQLException e) {
+            if (savepoint != null) {
+                connection.rollback(savepoint);
+                connection.commit();
+            } else {
+                connection.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            connection.setAutoCommit(true);
+        }
+    }
+
     @Override
     public void close() throws SQLException {
         if (connection != null) {
