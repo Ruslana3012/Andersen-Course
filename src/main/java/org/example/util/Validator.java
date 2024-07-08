@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.model.BusTicket;
@@ -7,10 +7,10 @@ import org.example.model.Violation;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.example.service.ViolationService.putViolationInMap;
+import static org.example.util.Violation.putViolationInMap;
 
 @Slf4j
-public class ValidatorService {
+public class Validator {
     private static int validTickets = 0;
 
     public static void validateTickets(List<BusTicket> tickets) {

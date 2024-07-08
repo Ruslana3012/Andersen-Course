@@ -1,49 +1,38 @@
 package org.example;
 
-import org.example.config.FlywayConfiguration;
-import org.example.dao.TicketServiceDAO;
-import org.example.dao.UserServiceDAO;
-import org.example.entity.TicketEntity;
+import org.example.entity.Ticket;
 import org.example.entity.TicketType;
-import org.example.entity.UserEntity;
+import org.example.entity.User;
+import org.example.service.impl.TicketServiceImpl;
+import org.example.service.impl.UserServiceImpl;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Properties;
 
+@SpringBootApplication
 public class Main {
-    public static void main(String[] args) throws SQLException, IOException {
-        Properties properties = new Properties();
-        InputStream input = Main.class.getClassLoader().getResourceAsStream("database.properties");
-        properties.load(input);
-        FlywayConfiguration.applyDbMigrations();
-        Connection connection = DriverManager.getConnection(
-                properties.getProperty("database.url"),
-                properties.getProperty("database.user"),
-                properties.getProperty("database.password"));
-        TicketServiceDAO ticketDAO = new TicketServiceDAO(connection);
-        UserServiceDAO userDAO = new UserServiceDAO(connection);
+    public static void main(String[] args) {
+        ApplicationContext context = SpringApplication.run(Main.class, args);
+        TicketServiceImpl ticketService = context.getBean(TicketServiceImpl.class);
+        UserServiceImpl userService = context.getBean(UserServiceImpl.class);
 
-        UserEntity user = new UserEntity("Ivanna", new Timestamp(12334));
-        userDAO.saveUser(user);
+        User user = new User("Ivanna", new Timestamp(12334));
+        userService.saveUser(user);
 
-        TicketEntity ticket1 = new TicketEntity(TicketType.DAY, new Timestamp(15667), 3);
+        Ticket ticket1 = new Ticket(TicketType.DAY, new Timestamp(15667), user);
+        ticketService.saveTicket(ticket1);
 
-        ticketDAO.saveTicket(ticket1);
+        System.out.println("Get ticket by id [1]: " + ticketService.fetchTicketById(1L));
+        System.out.println("Get tickets by user id [1]: " + ticketService.fetchTicketsByUserId(1L));
+        System.out.println("Get user by id [2]: " + userService.fetchUserById(2L));
 
-        System.out.println("Get ticket by id [1]: " + ticketDAO.fetchTicketById(1));
-        System.out.println("Get tickets by user id [1]: " + ticketDAO.fetchTicketsByUserId(1));
-        System.out.println("Get user by id [2]: " + userDAO.fetchUserById(2));
+        System.out.println("Update ticket type from [WEEK] to [YEAR]: " + ticketService.updateTicketType(1L, new Ticket(TicketType.YEAR, new Timestamp(15667), user)));
 
-        System.out.println("Update ticket type from [DAY] to [WEEK]: " + ticketDAO.updateTicketType(1, new TicketEntity(TicketType.WEEK, new Timestamp(15667), 1)));
-
-        System.out.println("Get all tickets for user [Ivanna]: " + ticketDAO.fetchTicketsByUserId(userDAO.getUserIdByName("Ivanna")));
-        userDAO.deleteUserByIdANdAllTheirTickets(userDAO.getUserIdByName("Ivanna"));
-        System.out.println("Check that user [Ivanna] was deleted: " + userDAO.getAllUsers());
-        System.out.println("Check that tickets was deleted after user deletion [Ivanna]: " + ticketDAO.fetchTicketsByUserId(3));
+        System.out.println("Get all tickets for user [Ruslana]: " + ticketService.fetchTicketsByUserId(1L));
+        userService.deleteUserByIdANdAllTheirTickets(1L);
+        System.out.println("Check that user [Ruslana] was deleted: " + userService.getAllUsers());
+        System.out.println("Check that tickets was deleted after user deletion [Ruslana]: " + ticketService.fetchTicketsByUserId(1L));
     }
 }
