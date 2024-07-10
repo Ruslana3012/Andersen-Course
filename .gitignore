@@ -7,4 +7,5 @@
 /gradlew
 /gradlew.bat
 /Andersen.iml
+/src/main/resources/application.properties
 
