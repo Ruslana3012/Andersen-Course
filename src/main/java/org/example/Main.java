@@ -1,24 +1,49 @@
 package org.example;
 
-import org.example.model.BusTicket;
-import org.example.service.BusTicketService;
-import java.util.Date;
-import java.util.List;
+import org.example.config.FlywayConfiguration;
+import org.example.dao.TicketServiceDAO;
+import org.example.dao.UserServiceDAO;
+import org.example.entity.TicketEntity;
+import org.example.entity.TicketType;
+import org.example.entity.UserEntity;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Properties;
 
 public class Main {
-    public static void main(String[] args) {
-        BusTicketService.storeTicket(new BusTicket(1L, new Date(), "A", 356));
-        BusTicketService.storeTicket(new BusTicket(2L, new Date(), "B", 216));
-        BusTicketService.storeTicket(new BusTicket(3L, new Date(), "B", 3308));
-        BusTicketService.storeTicket(new BusTicket(4L, new Date(), "A", 500));
-        BusTicketService.storeTicket(new BusTicket(5L, new Date(), "C", 190));
+    public static void main(String[] args) throws SQLException, IOException {
+        Properties properties = new Properties();
+        InputStream input = Main.class.getClassLoader().getResourceAsStream("database.properties");
+        properties.load(input);
+        FlywayConfiguration.applyDbMigrations();
+        Connection connection = DriverManager.getConnection(
+                properties.getProperty("database.url"),
+                properties.getProperty("database.user"),
+                properties.getProperty("database.password"));
+        TicketServiceDAO ticketDAO = new TicketServiceDAO(connection);
+        UserServiceDAO userDAO = new UserServiceDAO(connection);
 
-        BusTicket ticket = BusTicketService.getTicketById(2L);
-        System.out.println("We anticipate the ticket with id [2]: " + ticket);
+        UserEntity user = new UserEntity("Ivanna", new Timestamp(12334));
+        userDAO.saveUser(user);
 
-        List<BusTicket> tickets = BusTicketService.getTicketsByTypeAndPrice("A", 200, 500);
-        System.out.println("We anticipate the tickets with id [1] and [4] " + tickets);
+        TicketEntity ticket1 = new TicketEntity(TicketType.DAY, new Timestamp(15667), 3);
 
-        BusTicketService.removeTicketById(3L);
+        ticketDAO.saveTicket(ticket1);
+
+        System.out.println("Get ticket by id [1]: " + ticketDAO.fetchTicketById(1));
+        System.out.println("Get tickets by user id [1]: " + ticketDAO.fetchTicketsByUserId(1));
+        System.out.println("Get user by id [2]: " + userDAO.fetchUserById(2));
+
+        System.out.println("Update ticket type from [DAY] to [WEEK]: " + ticketDAO.updateTicketType(1, new TicketEntity(TicketType.WEEK, new Timestamp(15667), 1)));
+
+        System.out.println("Get all tickets for user [Ivanna]: " + ticketDAO.fetchTicketsByUserId(userDAO.getUserIdByName("Ivanna")));
+        userDAO.deleteUserByIdANdAllTheirTickets(userDAO.getUserIdByName("Ivanna"));
+        System.out.println("Check that user [Ivanna] was deleted: " + userDAO.getAllUsers());
+        System.out.println("Check that tickets was deleted after user deletion [Ivanna]: " + ticketDAO.fetchTicketsByUserId(3));
     }
 }
