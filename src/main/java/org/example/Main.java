@@ -8,25 +8,14 @@ import org.example.entity.TicketType;
 import org.example.entity.UserEntity;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Properties;
 
 public class Main {
-    public static void main(String[] args) throws SQLException, IOException {
-        Properties properties = new Properties();
-        InputStream input = Main.class.getClassLoader().getResourceAsStream("database.properties");
-        properties.load(input);
+    public static void main(String[] args) throws IOException {
         FlywayConfiguration.applyDbMigrations();
-        Connection connection = DriverManager.getConnection(
-                properties.getProperty("database.url"),
-                properties.getProperty("database.user"),
-                properties.getProperty("database.password"));
-        TicketServiceDAO ticketDAO = new TicketServiceDAO(connection);
-        UserServiceDAO userDAO = new UserServiceDAO(connection);
+        TicketServiceDAO ticketDAO = new TicketServiceDAO();
+        UserServiceDAO userDAO = new UserServiceDAO();
 
         UserEntity user = new UserEntity("Ivanna", new Timestamp(12334));
         userDAO.saveUser(user);
