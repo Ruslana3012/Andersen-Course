@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "ticketType": "DAY",
+        "creationDate": "2022-07-14T20:21:13.231",
+        "user": {
+            "id": 1,
+            "name": "User 1",
+            "creationDate": "2022-06-12T12:11:10.231"
+        }
+    },
+    {
+        "id": 2,
+        "ticketType": "WEEK",
+        "creationDate": "2022-07-14T20:21:13.231",
+        "user": {
+            "id": 2,
+            "name": "User 2",
+            "creationDate": "2022-06-12T12:11:10.231"
+        }
+    },
+    {
+        "id": 3,
+        "ticketType": "MONTH",
+        "creationDate": "2022-07-14T20:21:13.231",
+        "user": {
+            "id": 3,
+            "name": "User 3",
+            "creationDate": "2022-06-12T12:11:10.231"
+        }
+    },
+    {
+        "id": 4,
+        "ticketType": "YEAR",
+        "creationDate": "2022-07-14T20:21:13.231",
+        "user": {
+            "id": 4,
+            "name": "User 4",
+            "creationDate": "2022-06-12T12:11:10.231"
+        }
+    }
+]
