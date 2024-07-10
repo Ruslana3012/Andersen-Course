@@ -1,14 +1,12 @@
-package org.example.service;
-
-import org.example.model.Violation;
+package org.example.util;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ViolationService {
-    private static final Map<Violation, Integer> violations = new HashMap<>();
+public class Violation {
+    private static final Map<org.example.model.Violation, Integer> violations = new HashMap<>();
 
-    public static void putViolationInMap(Violation violation) {
+    public static void putViolationInMap(org.example.model.Violation violation) {
         violations.merge(violation, 1, Integer::sum);
     }
 
