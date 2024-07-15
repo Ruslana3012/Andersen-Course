@@ -1,9 +1,9 @@
 package org.example.util;
 
-import jakarta.persistence.AttributeConverter;
-import jakarta.persistence.Converter;
 import org.example.entity.TicketType;
 
+import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 import java.util.stream.Stream;
 
 @Converter(autoApply = true)

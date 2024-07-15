@@ -1,9 +1,10 @@
 package org.example.entity;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.ColumnTransformer;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Getter
@@ -28,6 +29,7 @@ public class Ticket {
     private Timestamp creationDate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     public Ticket(TicketType ticketType, Timestamp creationDate, User user) {

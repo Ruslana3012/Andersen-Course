@@ -1,8 +1,9 @@
 package org.example.entity;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class User {
     @Column(name = "creation_date")
     private Timestamp creationDate;
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Ticket> tickets = new ArrayList<>();
 
     public User(String name, Timestamp creationDate) {
