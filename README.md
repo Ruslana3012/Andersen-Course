@@ -1,13 +1,10 @@
-![image](https://github.com/user-attachments/assets/26fe246f-ae1a-47d4-ae2f-a6918d606a23)
-![image](https://github.com/user-attachments/assets/ef04269a-cc11-48fa-9590-4b5b5d39d0f6)
+![image](https://github.com/user-attachments/assets/c753bd5c-5d93-4217-9b7a-1203669657e5)
 
-1. Convert your project to Spring Boot project. Allow the framework to create DB data source for you.
-2. Create your custom @Configuration with a @Bean called ThisIsMyFirstConditionalBean. The bean 
-should appear in your application only if its @ConditionalOnProperty statement is true.
-3. Add Spring Data support to your project. Create/replace your custom Ticket CRUD DAO class with the 
-@Repository that extends Spring Data CRUD repository.
-4. Make your Ticket application a web service using Spring MVC with only one @RestController, that has a 
-REST endpoint that returns a JSON with a single ticket.
-5. Add Spring Security Support to your project and make your single endpoint protected with username + 
-password protection.
+1. Attach JUnit 5 and Mockito dependencies to your project (via Spring Boot starter or independently)
+2. Pick the * biggest_service _class(C) in your application.
+3. Create a Test class for * biggest_service _class(C) in src.test.java.com.andersen.$[YOUR_PROJECT_NAME}
+4. Use this class to create @Test methods for all methods in * biggest_service _class(C)
+5. Every method should be covered by at least 3 test methods - positive, negative and corner case.
+6. Use JUnit annotations and method to “init” test data and make assertions and verification checks.
+7. Use Mockito to mock DB repository behaviour
 
